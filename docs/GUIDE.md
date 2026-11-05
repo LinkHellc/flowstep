@@ -22,6 +22,7 @@
 | `layers` | 可选。顶栏的层级条，`{label, items}`；课题用 `layer: 1..n` 指向它 | `{label:'热管理域', items:['整车','座舱']}` |
 | `tabs` | 中栏两个标签的名字 | `['回路','数据']` |
 | `table.title / columns / empty` | 底部轨迹表的标题、列名、空状态提示 | 见下 |
+| `labels` | 可选。界面文字：`now`（顶栏“正在学习”）、`progress`（“学习进度”）、`detail`（“步骤详情”）、`overview`（“概览”）、`start`（开始按钮）。讲故事类课程可以换成不像上课的说法 | `{now:'正在发生'}` |
 | `media` | 被追踪的载体状态：`{键: {name, color}}` | `hot: {name:'高压气态冷媒', color:'var(--hot)'}` |
 
 可用颜色变量：`--hot --warm --cold --cool --ok --air --bad --blue --faint`，浅色和深色主题会自动切换。

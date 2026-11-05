@@ -33,4 +33,5 @@ index.html         入口：先 core.js → 课程脚本 → 最后 app.js
 ```
 
 ## 使用案例
+- **万物的一天 · 第一期《一杯奶茶的一天》**：`milk-tea.html`，奶茶第一人称讲自己从原料到被喝掉的一天（`content/milk-tea-day/`）。
 - [汽车空调及热管理讲解](https://github.com/LinkHellc/hermal-management-site)：9 个课题，第一份用 FlowStep 做的完整课程。

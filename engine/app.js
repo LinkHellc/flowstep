@@ -12,6 +12,8 @@
   const medName = (m) => (C.media[m] || {}).name || m;
   const medColor = (m) => (C.media[m] || {}).color || 'var(--faint)';
   document.title = C.siteTitle || C.brand.title;
+  // 界面文字，可在 course.js 的 labels 里改成符合课程语气的说法
+  const LB = Object.assign({ now: '正在学习', progress: '学习进度', detail: '步骤详情', overview: '概览', start: '▶ 开始第 1 步' }, C.labels || {});
 
   const st = { topic: null, step: -1, tab: 'loop', cat: ALL, playing: false, speed: 1, timer: null, prog: {} };
   try { st.prog = JSON.parse(localStorage.getItem(KEY + '-prog') || '{}'); } catch (e) {}
@@ -25,11 +27,11 @@
       <span class="logo">${C.brand.logo || ''}</span>
       <span><b>${C.brand.title}</b><small>${C.brand.tagline || ''}</small></span>
     </a>
-    <div class="hd-learn"><small>正在学习</small><b id="hdTopic">—</b>
+    <div class="hd-learn"><small>${LB.now}</small><b id="hdTopic">—</b>
       <div class="row"><span class="segs" id="hdSegs"></span><small id="hdStep"></small></div></div>
     <div class="hd-dom" ${DOMS.length ? '' : 'style="display:none"'}><div class="row"><small class="k">${(C.layers || {}).label || ''}</small><small class="k" id="hdDomName"></small></div>
       <div class="doms" id="hdDoms">${DOMS.map((d, i) => `<span title="${d}">${i + 1}</span>`).join('')}</div></div>
-    <div class="hd-prog"><div class="row"><small class="k">学习进度</small><b id="hdPct">0%</b></div>
+    <div class="hd-prog"><div class="row"><small class="k">${LB.progress}</small><b id="hdPct">0%</b></div>
       <div class="pbar" id="hdBar"></div><small id="hdProgTxt"></small></div>
     <div class="themesw"><button data-v="light" title="浅色">☀</button><button data-v="dark" title="深色">☾</button></div>
   </header>
@@ -48,7 +50,7 @@
       <div class="stage-data" id="data"></div>
     </section>
     <aside class="panel detail">
-      <div class="detail-hd"><h2>步骤详情</h2><button class="btn" id="toOverview">‹ 概览</button></div>
+      <div class="detail-hd"><h2>${LB.detail}</h2><button class="btn" id="toOverview">‹ ${LB.overview}</button></div>
       <div class="detail-body" id="detail"></div>
     </aside>
     <section class="panel flowtbl">
@@ -113,7 +115,7 @@
     const t = st.topic;
     $('#hdTopic').textContent = t ? `${t.code} · ${t.name}` : '—';
     $('#hdSegs').innerHTML = t ? t.steps.map((_, i) => `<i class="${i < st.step ? 'd' : i === st.step ? 'c' : ''}"></i>`).join('') : '';
-    $('#hdStep').textContent = t ? (st.step < 0 ? `概览 · 共 ${t.steps.length} 步` : `步骤 ${st.step + 1}/${t.steps.length} · ${t.steps[st.step].t}`) : '';
+    $('#hdStep').textContent = t ? (st.step < 0 ? `${LB.overview} · 共 ${t.steps.length} 步` : `步骤 ${st.step + 1}/${t.steps.length} · ${t.steps[st.step].t}`) : '';
     $$('#hdDoms span').forEach((s, i) => s.classList.toggle('on', !!t && t.layer === i + 1));
     $('#hdDomName').textContent = t && DOMS.length ? (DOMS[t.layer - 1] || '') : '';
     const done = T.filter(x => status(x) === 'd').length, doing = T.filter(x => status(x) === 'c').length;
@@ -158,9 +160,9 @@
     const t = st.topic, s = st.step >= 0 ? t.steps[st.step] : null;
     const kv = (rows) => rows && rows.length ? `<table class="kv">${rows.map(([k, v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('')}</table>` : '';
     if (!s) {
-      $('#detail').innerHTML = `<div class="sn">概览 · ${t.cat}</div><h3>${t.name}</h3><p class="sub">${t.intro.s}</p>
+      $('#detail').innerHTML = `<div class="sn">${LB.overview} · ${t.cat}</div><h3>${t.name}</h3><p class="sub">${t.intro.s}</p>
         <div class="desc">${t.intro.b}</div>${kv(t.intro.kv)}
-        <p style="margin-top:14px"><button class="btn pri" id="startBtn">▶ 开始第 1 步</button></p>`;
+        <p style="margin-top:14px"><button class="btn pri" id="startBtn">${LB.start}</button></p>`;
       $('#startBtn').onclick = () => go(0);
     } else {
       $('#detail').innerHTML = `<div class="sn">步骤 ${st.step + 1} / ${t.steps.length}</div><h3>${s.t}</h3><p class="sub">${s.s || ''}</p>
